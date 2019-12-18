@@ -1,6 +1,9 @@
 ---
 # [bento - Vagrant Cloud](https://app.vagrantup.com/bento)
-- name: "centos7"
-  box: "bento/centos-7"
 - name: "ubuntu1804"
   box: "bento/ubuntu-18.04"
+- name: "centos7"
+  box: "bento/centos-7"
+  # memory: 4096
+- name: "centos8"
+  box: "bento/centos-8"

@@ -37,11 +37,13 @@ Vagrant.configure("2") do |config|
   machines.each do |m|
     name = m["name"]
     box = m["box"]
+    memory = m["memory"]
     config.vm.define "#{name}" do |machine|
       machine.vm.box = box
       machine.vm.hostname = name
       machine.vm.provider "virtualbox" do |vb, override|
         vb.name = name
+        vb.memory = memory if memory
       end
       machine.vm.provision "bootstrap", type: "shell", privileged: true, path: "bootstrap/#{name}.sh"
       machine.vm.provision "setup_sshkey", type: "shell", privileged: false, inline: <<-SHELL
