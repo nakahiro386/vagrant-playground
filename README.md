@@ -20,6 +20,6 @@ mitamaeでanyenvをセットアップ
 ```sh
 $ vagrant ssh [machine]
 $ cd /vagrant/mitamae/
-$ ./install.sh
+$ ./install_anyenv.sh
 ```
 
