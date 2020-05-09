@@ -10,7 +10,12 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "./.vagrant", "/home/vagrant/.vagrant", mount_options: ['dmode=777', 'fmode=600']
   config.ssh.forward_x11 = true   # export DISPLAY=10.0.2.2:0.0
   # plugin settings
-  config.vbguest.auto_update = false if Vagrant.has_plugin?("vagrant-vbguest")
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.auto_update = false
+    config.vbguest.no_remote = true
+    config.vbguest.no_install = true
+    config.vbguest.installer_options = {allow_kernel_upgrade: true, reboot_timeout: 300}
+  end
   config.timezone.value = 'Asia/Tokyo' if Vagrant.has_plugin?("vagrant-timezone")
   config.cache.scope = :box if Vagrant.has_plugin?("vagrant-cachier")
   # config.cache.disable!
@@ -45,7 +50,9 @@ Vagrant.configure("2") do |config|
         vb.name = name
         vb.memory = memory if memory
       end
-      machine.vm.provision "bootstrap", type: "shell", privileged: true, path: "bootstrap/#{name}.sh"
+      machine.vm.provision "bootstrap", type: "shell", privileged: false, inline: <<-SHELL
+        /bin/sh /vagrant/mitamae/bootstrap.sh
+      SHELL
       machine.vm.provision "setup_sshkey", type: "shell", privileged: false, inline: <<-SHELL
         mkdir -p -m u=rwx,g=,o= ~/.ssh
         cp -f ~/.vagrant/machines/#{name}/virtualbox/private_key ~/.ssh/id_rsa
